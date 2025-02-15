@@ -36,3 +36,108 @@
     transform: rotate(360deg);
   }
 }
+/* Add this to App.css or create a separate CSS file for login */
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.login-container input {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.login-container button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.login-container button:hover {
+  background-color: #45a049;
+}
+
+.login-container p {
+  margin-top: 10px;
+}
+
+/* Add these styles to App.css or another CSS file */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.home-container h1 {
+  margin-bottom: 20px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.home-container p {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.login-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.login-button:hover {
+  background-color: #45a049;
+}
+/* Style for ChooseRolePage */
+.choose-role-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.choose-role-container button {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.choose-role-container button:hover {
+  background-color: #45a049;
+}
+
+/* Style for Dashboards */
+.customer-dashboard, .company-worker-dashboard {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.customer-dashboard h2, .company-worker-dashboard h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
