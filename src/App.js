@@ -12,6 +12,11 @@ import CustomerDashboard from './components/CustomerDashboard';
 import CompanyWorkerDashboard from './components/CompanyWorkerDashboard';
 import NavBar from './components/NavBar';
 
+// Import pages
+import MakeOrder from './pages/MakeOrder';
+import AvailableCars from './pages/AvailableCars';
+import AboutUs from './pages/AboutUs';
+
 function App() {
   return (
     <Router>
@@ -20,10 +25,10 @@ function App() {
   );
 }
 
-// This component helps to hide NavBar on the login page
+// This component helps to hide NavBar on the login and choose-role pages
 function MainApp() {
   const location = useLocation();
-  const hideNavBarOnPages = ['/login']; // List pages where NavBar shouldn't appear
+  const hideNavBarOnPages = ['/login', '/choose-role']; // Hide NavBar on these pages
 
   return (
     <div className="App">
@@ -36,6 +41,9 @@ function MainApp() {
         <Route path="/choose-role" element={<ChooseRolePage />} />
         <Route path="/customer-dashboard" element={<CustomerDashboard />} />
         <Route path="/company-worker-dashboard" element={<CompanyWorkerDashboard />} />
+        <Route path="/make-order" element={<MakeOrder />} /> {/* Add this route */}
+        <Route path="/available-cars" element={<AvailableCars />} /> {/* Add this route */}
+        <Route path="/about-us" element={<AboutUs />} /> {/* Add this route */}
       </Routes>
     </div>
   );

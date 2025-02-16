@@ -2,10 +2,9 @@ import React from 'react';
 
 function AboutUs() {
   return (
-    <div className="page-container">
-      <h2>About Us</h2>
-      <p>We are a leading car rental service dedicated to customer satisfaction.</p>
-      {/* Add more details about the company */}
+    <div>
+      <h1>About Us</h1>
+      <p>Learn more about our company and what we offer.</p>
     </div>
   );
 }
