@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAvailableCars } from '../services/api';  // Import API function
+import './AvailableCars.css'; // Import CSS file for styling
 
 const AvailableCars = () => {
   const [cars, setCars] = useState([]);
@@ -21,23 +22,30 @@ const AvailableCars = () => {
     fetchCars();
   }, []);
 
-  if (loading) return <p>Loading cars...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (loading) return <p className="loading-message">Loading cars...</p>;
+  if (error) return <p className="error-message">{error}</p>;
 
   return (
-    <div>
-      <h2>Available Cars</h2>
-      <p>Here are the available cars for your ride:</p>
+    <div className="cars-container">
+      <h2 className="page-title">Available Cars</h2>
+      <p className="intro-text">Here are the available cars for your ride:</p>
+      
       {cars.length > 0 ? (
-        <ul>
+        <div className="cars-list">
           {cars.map((car) => (
-            <li key={car.id}>
-              {car.make} {car.model} - {car.status}
-            </li>
+            <div className="car-item" key={car.id}>
+              <div className="car-details">
+                <h3 className="car-name">{car.make} {car.model}</h3>
+                <p><strong>Price:</strong> ${car.price ? car.price.toFixed(2) : 'N/A'}</p> {/* Added fallback for price */}
+                <p><strong>Quantity Available:</strong> {car.quantity}</p>
+                <p><strong>Status:</strong> {car.status}</p>
+              </div>
+              <button className="btn-rent">Rent Now</button>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p>No cars available at the moment.</p>
+        <p className="no-cars-message">No cars available at the moment.</p>
       )}
     </div>
   );

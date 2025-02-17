@@ -1,0 +1,87 @@
+/* AvailableCars.css */
+
+.cars-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .page-title {
+    font-size: 2rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .intro-text {
+    font-size: 1.1rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .cars-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .car-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .car-name {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0 0 10px;
+  }
+  
+  .car-details p {
+    font-size: 1rem;
+    color: #555;
+    margin: 5px 0;
+  }
+  
+  .btn-rent {
+    background-color: #28a745;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-rent:hover {
+    background-color: #218838;
+  }
+  
+  .loading-message {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #888;
+  }
+  
+  .error-message {
+    font-size: 1.2rem;
+    text-align: center;
+    color: red;
+  }
+  
+  .no-cars-message {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #888;
+  }
+  
