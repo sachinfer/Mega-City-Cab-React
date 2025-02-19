@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 
 // Import components
@@ -16,6 +16,7 @@ import NavBar from './components/NavBar';
 import MakeOrder from './pages/MakeOrder';
 import AvailableCars from './pages/AvailableCars';
 import AboutUs from './pages/AboutUs';
+import NotFoundPage from './pages/NotFoundPage';  // 404 page
 
 function App() {
   return (
@@ -32,18 +33,25 @@ function MainApp() {
 
   return (
     <div className="App">
+      {/* Conditionally render the NavBar */}
       {!hideNavBarOnPages.includes(location.pathname) && <NavBar />}
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/booking" element={<BookingPage />} />
+        <Route path="/booking/:carId" element={<BookingPage />} /> {/* Dynamic route for booking */}
         <Route path="/driver" element={<DriverPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/choose-role" element={<ChooseRolePage />} />
         <Route path="/customer-dashboard" element={<CustomerDashboard />} />
         <Route path="/company-worker-dashboard" element={<CompanyWorkerDashboard />} />
-        <Route path="/make-order" element={<MakeOrder />} /> {/* Add this route */}
-        <Route path="/available-cars" element={<AvailableCars />} /> {/* Add this route */}
-        <Route path="/about-us" element={<AboutUs />} /> {/* Add this route */}
+        <Route path="/make-order" element={<MakeOrder />} />
+        <Route path="/available-cars" element={<AvailableCars />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        
+        {/* Dynamic Route Example for Customer Dashboard */}
+        <Route path="/customer-dashboard/:username" element={<CustomerDashboard />} />
+
+        {/* Catch-all Route for 404 */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
   );

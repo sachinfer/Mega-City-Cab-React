@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; // To get the carId from the URL
 import { getCarById } from '../services/api'; // Assuming you have an API function to get the car details
-import './BookingPage.css'; // Import CSS for styling
 
 const BookingPage = () => {
   const { carId } = useParams(); // Get the carId from the route parameter
@@ -12,7 +11,7 @@ const BookingPage = () => {
   const [vehicleName, setVehicleName] = useState('');
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');
-
+  
   useEffect(() => {
     // Fetch the vehicle details based on the carId
     const fetchCarDetails = async () => {
@@ -44,8 +43,8 @@ const BookingPage = () => {
     <div className="booking-container">
       <h2>Customer Details</h2>
       <p>Please fill in your details to complete the rental process.</p>
-      <form onSubmit={handleSubmit} className="booking-form">
-        <div className="form-group">
+      <form onSubmit={handleSubmit}>
+        <div>
           <label htmlFor="name">Name:</label>
           <input 
             type="text" 
@@ -53,10 +52,9 @@ const BookingPage = () => {
             value={name} 
             onChange={(e) => setName(e.target.value)} 
             required 
-            className="form-control"
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="address">Address:</label>
           <input 
             type="text" 
@@ -64,10 +62,9 @@ const BookingPage = () => {
             value={address} 
             onChange={(e) => setAddress(e.target.value)} 
             required 
-            className="form-control"
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="phone">Phone Number:</label>
           <input 
             type="tel" 
@@ -75,10 +72,9 @@ const BookingPage = () => {
             value={phone} 
             onChange={(e) => setPhone(e.target.value)} 
             required 
-            className="form-control"
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="email">Email:</label>
           <input 
             type="email" 
@@ -86,20 +82,18 @@ const BookingPage = () => {
             value={email} 
             onChange={(e) => setEmail(e.target.value)} 
             required 
-            className="form-control"
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="vehicle-name">Vehicle Name:</label>
           <input 
             type="text" 
             id="vehicle-name" 
             value={vehicleName} 
             disabled 
-            className="form-control"
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="date">Date:</label>
           <input 
             type="date" 
@@ -107,10 +101,9 @@ const BookingPage = () => {
             value={date} 
             onChange={(e) => setDate(e.target.value)} 
             required 
-            className="form-control"
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="time">Time:</label>
           <input 
             type="time" 
@@ -118,10 +111,9 @@ const BookingPage = () => {
             value={time} 
             onChange={(e) => setTime(e.target.value)} 
             required 
-            className="form-control"
           />
         </div>
-        <button type="submit" className="submit-btn">Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </div>
   );
