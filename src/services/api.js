@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create an axios instance with the base URL set to your backend
 const api = axios.create({
-  baseURL: 'http://localhost:8089',  // Backend API base URL
+  baseURL: 'http://localhost:8089', // Backend API base URL
   headers: {
     'Content-Type': 'application/json',
   },
@@ -43,10 +43,21 @@ export const getCarById = async (carId) => {
   }
 };
 
+// Create a new booking
+export const saveBooking = async (bookingData) => {
+  try {
+    const response = await api.post('/api/bookings/save', bookingData);
+    return response.data;
+  } catch (error) {
+    console.error('Error saving booking:', error);
+    throw error;
+  }
+};
+
 // Create a new order
 export const createOrder = async (orderData) => {
   try {
-    const response = await api.post('/orders', orderData);
+    const response = await api.post('/api/orders', orderData);
     return response.data;
   } catch (error) {
     console.error('Error creating order:', error);

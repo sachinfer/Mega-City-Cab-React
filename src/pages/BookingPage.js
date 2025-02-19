@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; // To get the carId from the URL
-import { getCarById } from '../services/api'; // Assuming you have an API function to get the car details
+import { getCarById, saveBooking } from '../services/api'; // Import API functions
 
 const BookingPage = () => {
-  const { carId } = useParams(); // Get the carId from the route parameter
+  const { carId } = useParams(); // Get carId from the route parameter
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
@@ -11,13 +11,14 @@ const BookingPage = () => {
   const [vehicleName, setVehicleName] = useState('');
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');
-  
+  const [message, setMessage] = useState('');
+
   useEffect(() => {
-    // Fetch the vehicle details based on the carId
+    // Fetch vehicle details using carId
     const fetchCarDetails = async () => {
       try {
-        const carDetails = await getCarById(carId); // Assuming this function returns car details by carId
-        setVehicleName(carDetails.make + " " + carDetails.model); // Example: 'Toyota Corolla'
+        const carDetails = await getCarById(carId); // API call to get car details
+        setVehicleName(carDetails.make + ' ' + carDetails.model); // Example: 'Toyota Corolla'
       } catch (error) {
         console.error('Failed to fetch car details:', error);
       }
@@ -26,23 +27,36 @@ const BookingPage = () => {
     fetchCarDetails();
   }, [carId]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Prepare the customer data
-    const customerData = { name, address, phone, email, vehicleName, time, date, carId };
-    
-    // Example: Perform API call to save customer data (e.g., save to DB)
-    console.log(customerData);
+    // Prepare the booking data
+    const bookingData = { name, address, phone, email, vehicleName, time, date, carId };
 
-    // Save the customer data via API (implement the saveCustomerData function)
-    // saveCustomerData(customerData);
+    try {
+      const response = await saveBooking(bookingData); // API call to save booking
+      if (response.ok) {
+        setMessage('Booking successful!');
+        setName('');
+        setAddress('');
+        setPhone('');
+        setEmail('');
+        setTime('');
+        setDate('');
+      } else {
+        setMessage('Failed to save booking.');
+      }
+    } catch (error) {
+      console.error('Error saving booking:', error);
+      setMessage('Error saving booking. Please try again.');
+    }
   };
 
   return (
     <div className="booking-container">
       <h2>Customer Details</h2>
       <p>Please fill in your details to complete the rental process.</p>
+      {message && <p style={{ color: 'red' }}>{message}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name">Name:</label>
