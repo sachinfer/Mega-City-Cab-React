@@ -35,7 +35,7 @@ export const getAvailableCars = async () => {
 // Fetch car details by ID
 export const getCarById = async (carId) => {
   try {
-    const response = await api.get(`/api/cars/${carId}`);
+    const response = await api.get(`/api/cars/available-cars/${carId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching car details:', error);
