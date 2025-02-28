@@ -25,6 +25,7 @@ api.interceptors.request.use(
 export const getAvailableCars = async () => {
   try {
     const response = await api.get('/api/cars/available-cars');
+    console.log("Hi")
     return response.data;
   } catch (error) {
     console.error('Error fetching available cars:', error);
@@ -36,6 +37,7 @@ export const getAvailableCars = async () => {
 export const getCarById = async (carId) => {
   try {
     const response = await api.get(`/api/cars/available-cars/${carId}`);
+    console.log("Hello")
     return response.data;
   } catch (error) {
     console.error('Error fetching car details:', error);
@@ -45,6 +47,8 @@ export const getCarById = async (carId) => {
 
 // Create a new booking
 export const saveBooking = async (bookingData) => {
+
+  console.log("Booking data : ", bookingData)
   try {
     const response = await api.post('/api/bookings/save', bookingData);
     return response.data;

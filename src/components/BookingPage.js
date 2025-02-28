@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // To get the carId from the URL
-import { getCarById } from '../services/api'; // Assuming you have an API function to get the car details
-import './BookingPage.css'; // Import CSS for styling
+import { useParams } from 'react-router-dom';
+import { getCarById } from '../services/api';
+import axios from 'axios';
+import './BookingPage.css';
 
+const api = axios.create({
+  baseURL: 'http://localhost:8089', // Backend API base URL
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 const BookingPage = () => {
-  const { carId } = useParams(); // Get the carId from the route parameter
+  const { carId } = useParams();
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
@@ -12,116 +19,159 @@ const BookingPage = () => {
   const [vehicleName, setVehicleName] = useState('');
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // Fetch the vehicle details based on the carId
     const fetchCarDetails = async () => {
       try {
-        const carDetails = await getCarById(carId); // Assuming this function returns car details by carId
-        setVehicleName(carDetails.make + " " + carDetails.model); // Example: 'Toyota Corolla'
+        const carDetails = await getCarById(carId);
+        setVehicleName(`${carDetails.make} ${carDetails.model}`);
       } catch (error) {
         console.error('Failed to fetch car details:', error);
+        setMessage('Error fetching vehicle details. Please try again later.');
       }
     };
 
     fetchCarDetails();
   }, [carId]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
+    setMessage('');
 
-    // Prepare the customer data
     const customerData = { name, address, phone, email, vehicleName, time, date, carId };
-    
-    // Example: Perform API call to save customer data (e.g., save to DB)
-    console.log(customerData);
 
-    // Save the customer data via API (implement the saveCustomerData function)
-    // saveCustomerData(customerData);
+    console.log("Booking data 22 : ", customerData);
+    
+
+    console.log("Booking data 234 : ", event)
+    // export const saveBooking = async (bookingData) => {
+    
+      // console.log("Booking data : ", bookingData)
+      try {
+        const response = await api.post('/api/bookings/save', customerData);
+        return response.data;
+      } catch (error) {
+        console.error('Error saving booking:', error);
+        throw error;
+      }
+    // };
+
+    // try {
+    //   const response = await axios.post('/api/bookings/save', customerData);
+    //   setMessage('Booking saved successfully!');
+    //   console.log('Saved booking:', response.data);
+
+    //   // Clear form fields
+    //   setName('');
+    //   setAddress('');
+    //   setPhone('');
+    //   setEmail('');
+    //   setTime('');
+    //   setDate('');
+    // } catch (error) {
+    //   console.error('Error saving booking:', error);
+    //   setMessage('Failed to save booking. Please try again.');
+    // } finally {
+    //   setIsSubmitting(false);
+    // }
   };
 
   return (
     <div className="booking-container">
       <h2>Customer Details</h2>
       <p>Please fill in your details to complete the rental process.</p>
+
+      {message && <p className="message">{message}</p>}
+
       <form onSubmit={handleSubmit} className="booking-form">
         <div className="form-group">
           <label htmlFor="name">Name:</label>
-          <input 
-            type="text" 
-            id="name" 
-            value={name} 
-            onChange={(e) => setName(e.target.value)} 
-            required 
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
             className="form-control"
+            disabled={isSubmitting}
           />
         </div>
         <div className="form-group">
           <label htmlFor="address">Address:</label>
-          <input 
-            type="text" 
-            id="address" 
-            value={address} 
-            onChange={(e) => setAddress(e.target.value)} 
-            required 
+          <input
+            type="text"
+            id="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
             className="form-control"
+            disabled={isSubmitting}
           />
         </div>
         <div className="form-group">
           <label htmlFor="phone">Phone Number:</label>
-          <input 
-            type="tel" 
-            id="phone" 
-            value={phone} 
-            onChange={(e) => setPhone(e.target.value)} 
-            required 
+          <input
+            type="tel"
+            id="phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
             className="form-control"
+            disabled={isSubmitting}
           />
         </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
-          <input 
-            type="email" 
-            id="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
             className="form-control"
+            disabled={isSubmitting}
           />
         </div>
         <div className="form-group">
           <label htmlFor="vehicle-name">Vehicle Name:</label>
-          <input 
-            type="text" 
-            id="vehicle-name" 
-            value={vehicleName} 
-            disabled 
+          <input
+            type="text"
+            id="vehicle-name"
+            value={vehicleName}
+            disabled
             className="form-control"
           />
         </div>
         <div className="form-group">
           <label htmlFor="date">Date:</label>
-          <input 
-            type="date" 
-            id="date" 
-            value={date} 
-            onChange={(e) => setDate(e.target.value)} 
-            required 
+          <input
+            type="date"
+            id="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
             className="form-control"
+            disabled={isSubmitting}
           />
         </div>
         <div className="form-group">
           <label htmlFor="time">Time:</label>
-          <input 
-            type="time" 
-            id="time" 
-            value={time} 
-            onChange={(e) => setTime(e.target.value)} 
-            required 
+          <input
+            type="time"
+            id="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            required
             className="form-control"
+            disabled={isSubmitting}
           />
         </div>
-        <button type="submit" className="submit-btn">Submit</button>
+        <button type="submit" className="submit-btn" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Submit'}
+        </button>
       </form>
     </div>
   );

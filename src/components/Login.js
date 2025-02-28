@@ -10,7 +10,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     axios
-      .post('http://localhost:8080/api/login', { username, password })
+      .post('http://localhost:8088/api/login', { username, password })
       .then((response) => {
         setRole(response.data.role);
         localStorage.setItem('user', JSON.stringify(response.data));
