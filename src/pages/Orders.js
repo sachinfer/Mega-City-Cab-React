@@ -56,18 +56,22 @@ const Orders = () => {
           {cars.map((car) => (
             <div className="car-item" key={car.id}>
               <div className="car-details">
-                <h3 className="car-name">{car.make} {car.model}</h3>
-                <p><strong>Price:</strong> ${car.price ? car.price.toFixed(2) : 'N/A'}</p>
-                <p><strong>Quantity Available:</strong> {car.quantity}</p>
+                <h3 className="car-name">{car.name} </h3>
+                <p><strong>Address:</strong> {car.address}</p>
+                <p><strong>PhoneNumber:</strong> {car.phoneNumber}</p>
+                <p><strong>Email:</strong> {car.email}</p>
+                <p><strong>VehicleName:</strong> {car.vehicleName}</p>
+                <p><strong>Time:</strong> {car.time}</p>
+                <p><strong>Date:</strong> {car.date}</p>
                 <p><strong>Status:</strong> {car.status}</p>
               </div>
-              <button 
+              {/* <button 
                 className="btn-rent"
                 onClick={() => handleRentClick(car.id)}
                 disabled={car.quantity === 0}
               >
                 {car.quantity === 0 ? 'Out of Stock' : 'Rent Now'}
-              </button>
+              </button> */}
             </div>
           ))}
         </div>
