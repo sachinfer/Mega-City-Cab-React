@@ -14,7 +14,7 @@ const BookingPage = () => {
   const { carId } = useParams();
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phoneNumber, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [vehicleName, setVehicleName] = useState('');
   const [time, setTime] = useState('');
@@ -41,7 +41,7 @@ const BookingPage = () => {
     setIsSubmitting(true);
     setMessage('');
 
-    const customerData = { name, address, phone, email, vehicleName, time, date, carId };
+    const customerData = { name, address, phoneNumber, email, vehicleName, time, date, carId };
 
     console.log("Booking data 22 : ", customerData);
     
@@ -112,11 +112,11 @@ const BookingPage = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="phone">Phone Number:</label>
+          <label htmlFor="phoneNumber">Phone Number:</label>
           <input
             type="tel"
-            id="phone"
-            value={phone}
+            id="phoneNumber"
+            value={phoneNumber}
             onChange={(e) => setPhone(e.target.value)}
             required
             className="form-control"

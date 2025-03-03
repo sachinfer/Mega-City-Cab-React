@@ -13,7 +13,7 @@ import CompanyWorkerDashboard from './components/CompanyWorkerDashboard';
 import NavBar from './components/NavBar';
 
 // Import pages
-import MakeOrder from './pages/MakeOrder';
+import Orders from './pages/Orders';
 import AvailableCars from './pages/AvailableCars';
 import AboutUs from './pages/AboutUs';
 import NotFoundPage from './pages/NotFoundPage';  // 404 page
@@ -43,7 +43,7 @@ function MainApp() {
         <Route path="/choose-role" element={<ChooseRolePage />} />
         <Route path="/customer-dashboard" element={<CustomerDashboard />} />
         <Route path="/company-worker-dashboard" element={<CompanyWorkerDashboard />} />
-        <Route path="/make-order" element={<MakeOrder />} />
+        <Route path="/orders" element={<Orders />} />
         <Route path="/available-cars" element={<AvailableCars />} />
         <Route path="/about-us" element={<AboutUs />} />
         

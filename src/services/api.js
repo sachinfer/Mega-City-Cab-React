@@ -33,6 +33,18 @@ export const getAvailableCars = async () => {
   }
 };
 
+// Fetch available cars
+export const getOrders = async () => {
+  try {
+    const response = await api.get('/api/orders/available-orders');
+    console.log("Hi")
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching available cars:', error);
+    throw error;
+  }
+};
+
 // Fetch car details by ID
 export const getCarById = async (carId) => {
   try {
