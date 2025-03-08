@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, googleProvider } from '../firebase/firebaseConfig';  // Import Firebase authentication
+import { auth, googleProvider } from '../firebase/firebaseConfig'; // Firebase auth and Google provider
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBCheckbox, MDBIcon } from 'mdb-react-ui-kit';
+import './LoginPage.css'; // Adjust this line to match the file name correctly
 
-function LoginPage() {
+const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Handle email login
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -25,6 +27,7 @@ function LoginPage() {
     }
   };
 
+  // Handle Google login
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
@@ -96,21 +99,12 @@ function LoginPage() {
                 <MDBBtn
                   tag="a"
                   color="none"
-                  className="mx-3"
-                  style={{ color: '#1266f1' }}
+                  className="mdb-btn-google mb-3"
                   onClick={handleGoogleLogin}
                   disabled={loading}
                 >
                   <MDBIcon fab icon="google" size="sm" />
-                </MDBBtn>
-                <MDBBtn tag="a" color="none" className="mx-3" style={{ color: '#1266f1' }}>
-                  <MDBIcon fab icon="facebook-f" size="sm" />
-                </MDBBtn>
-                <MDBBtn tag="a" color="none" className="mx-3" style={{ color: '#1266f1' }}>
-                  <MDBIcon fab icon="twitter" size="sm" />
-                </MDBBtn>
-                <MDBBtn tag="a" color="none" className="mx-3" style={{ color: '#1266f1' }}>
-                  <MDBIcon fab icon="github" size="sm" />
+                  &nbsp; Login with Google
                 </MDBBtn>
               </div>
             </MDBCardBody>
@@ -119,6 +113,6 @@ function LoginPage() {
       </MDBRow>
     </MDBContainer>
   );
-}
+};
 
 export default LoginPage;
