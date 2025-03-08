@@ -1,29 +1,32 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { auth, googleProvider } from '../firebase/firebaseConfig'; // Firebase auth and Google provider
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBCheckbox, MDBIcon } from 'mdb-react-ui-kit';
-import './LoginPage.css'; // Adjust this line to match the file name correctly
+import React, { useState } from "react";
+import { auth, googleProvider } from "../firebase/firebaseConfig";
+import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [email, setEmail] = useState(""); // State for email
+  const [password, setPassword] = useState(""); // State for password
+  const [loading, setLoading] = useState(false); // State for loading
+  const [error, setError] = useState(""); // State for error message
+  const navigate = useNavigate(); // Initialize navigate for page redirection
+
+  // Hardcoded credentials
+  const hardcodedUsername = "sachin";
+  const hardcodedPassword = "qaz@123";
 
   // Handle email login
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/choose-role");
-    } catch (err) {
-      setError('Invalid email or password');
-    } finally {
+
+    // Check if email and password match hardcoded credentials
+    if (email === hardcodedUsername && password === hardcodedPassword) {
       setLoading(false);
+      navigate("/choose-role");
+    } else {
+      setLoading(false);
+      setError('Invalid email or password');
     }
   };
 
@@ -41,77 +44,52 @@ const LoginPage = () => {
   };
 
   return (
-    <MDBContainer fluid className="p-4 background-radial-gradient overflow-hidden">
-      <MDBRow>
-        <MDBCol md="6" className="text-center text-md-start d-flex flex-column justify-content-center">
-          <h1 className="my-5 display-3 fw-bold ls-tight px-3" style={{ color: 'hsl(218, 81%, 95%)' }}>
-            Welcome Back! <br />
-            <span style={{ color: 'hsl(218, 81%, 75%)' }}>Login to your account</span>
-          </h1>
-          <p className="px-3" style={{ color: 'hsl(218, 81%, 85%)' }}>
-            Enter your credentials to continue using our platform.
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-900 to-blue-800">
+      <div className="flex flex-col md:flex-row items-center gap-10 p-10">
+        <div className="text-white max-w-md">
+          <h1 className="text-5xl font-bold mb-4">Mega City <br /> <span className="text-blue-300">Cab Service</span></h1>
+          <p className="text-gray-300">
+            Mega City Cab Service is Sri Lanka's No. 1 cab service and online booking platform. We offer reliable and affordable transportation solutions to meet all your travel needs. Book your ride with us today and experience the best in class service.
           </p>
-        </MDBCol>
-
-        <MDBCol md="6" className="position-relative">
-          <div id="radius-shape-1" className="position-absolute rounded-circle shadow-5-strong"></div>
-          <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>
-
-          <MDBCard className="my-5 bg-glass">
-            <MDBCardBody className="p-5">
-              <form onSubmit={handleEmailLogin}>
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Email"
-                  id="form3"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Password"
-                  id="form4"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-
-                {error && <p className="text-danger text-center mb-4">{error}</p>}
-
-                <div className="d-flex justify-content-center mb-4">
-                  <MDBCheckbox name="flexCheck" value="" id="flexCheckDefault" label="Remember me" />
-                </div>
-
-                <MDBBtn
-                  className="w-100 mb-4"
-                  size="md"
-                  disabled={loading}
-                >
-                  {loading ? 'Logging in...' : 'Login'}
-                </MDBBtn>
-              </form>
-
-              <div className="text-center">
-                <p>or login with:</p>
-                <MDBBtn
-                  tag="a"
-                  color="none"
-                  className="mdb-btn-google mb-3"
-                  onClick={handleGoogleLogin}
-                  disabled={loading}
-                >
-                  <MDBIcon fab icon="google" size="sm" />
-                  &nbsp; Login with Google
-                </MDBBtn>
-              </div>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+        </div>
+        <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm">
+          <form className="space-y-6" onSubmit={handleEmailLogin}>
+            <input 
+              type="email" 
+              placeholder="Email address" 
+              className="w-full p-3 border rounded-md" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+            />
+            <input 
+              type="password" 
+              placeholder="Password" 
+              className="w-full p-3 border rounded-md" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+            />
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <button 
+              type="submit" 
+              className="w-full py-3 bg-blue-500 text-white rounded-md font-semibold hover:bg-blue-600" 
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'SIGN IN'}
+            </button>
+          </form>
+          <p className="text-center text-gray-500 my-4">or sign in with:</p>
+          <div className="flex justify-center gap-4 text-blue-500">
+            <button 
+              onClick={handleGoogleLogin} 
+              className="text-blue-500 hover:text-blue-600 font-semibold"
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Sign in with Google'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
