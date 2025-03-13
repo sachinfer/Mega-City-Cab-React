@@ -24,15 +24,33 @@ const Orders = () => {
     fetchCars(); // Initial fetch call on component mount
   }, []);
 
-  const handleRentClick = (carId) => {
-    // Redirect to the booking page with the selected car's ID
-    navigate(`/booking/${carId}`);
-  };
-
   const handleRetry = () => {
     setLoading(true);
     setError(null);  // Reset error state before retrying
     fetchCars();  // Call the fetchCars function again
+  };
+
+  const handleDownloadBill = (car) => {
+    const billContent = `
+      Order Details:
+      --------------------
+      Car: ${car.name}
+      Address: ${car.address}
+      Phone Number: ${car.phoneNumber}
+      Email: ${car.email}
+      Vehicle Name: ${car.vehicleName}
+      Time: ${car.time}
+      Date: ${car.date}
+      Status: ${car.status}
+      Destination: ${car.destination}
+      Price: $${car.price}
+    `;
+
+    const blob = new Blob([billContent], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Bill_${car.id}.txt`;
+    link.click();
   };
 
   if (loading) return <p className="loading-message">Loading cars...</p>;
@@ -56,22 +74,19 @@ const Orders = () => {
           {cars.map((car) => (
             <div className="car-item" key={car.id}>
               <div className="car-details">
-                <h3 className="car-name">{car.name} </h3>
+                <h3 className="car-name">{car.name}</h3>
                 <p><strong>Address:</strong> {car.address}</p>
-                <p><strong>PhoneNumber:</strong> {car.phoneNumber}</p>
+                <p><strong>Phone Number:</strong> {car.phoneNumber}</p>
                 <p><strong>Email:</strong> {car.email}</p>
-                <p><strong>VehicleName:</strong> {car.vehicleName}</p>
+                <p><strong>Vehicle Name:</strong> {car.vehicleName}</p>
                 <p><strong>Time:</strong> {car.time}</p>
                 <p><strong>Date:</strong> {car.date}</p>
                 <p><strong>Status:</strong> {car.status}</p>
+                <p><strong>Destination:</strong> {car.destination}</p>
+                <p><strong>Price:</strong> ${car.price}</p>
+                {/* Add the Download Bill button */}
+                <button onClick={() => handleDownloadBill(car)} className="btn-download-bill">Download Bill</button>
               </div>
-              {/* <button 
-                className="btn-rent"
-                onClick={() => handleRentClick(car.id)}
-                disabled={car.quantity === 0}
-              >
-                {car.quantity === 0 ? 'Out of Stock' : 'Rent Now'}
-              </button> */}
             </div>
           ))}
         </div>
