@@ -21,26 +21,13 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Fetch available cars
+// Fetch all available cars
 export const getAvailableCars = async () => {
   try {
     const response = await api.get('/api/cars/available-cars');
-    console.log("Hi")
     return response.data;
   } catch (error) {
-    console.error('Error fetching available cars:', error);
-    throw error;
-  }
-};
-
-// Fetch available cars
-export const getOrders = async () => {
-  try {
-    const response = await api.get('/api/orders/available-orders');
-    console.log("Hi")
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching available cars:', error);
+    console.error('Error fetching available cars:', error.response?.data || error.message);
     throw error;
   }
 };
@@ -48,24 +35,53 @@ export const getOrders = async () => {
 // Fetch car details by ID
 export const getCarById = async (carId) => {
   try {
-    const response = await api.get(`/api/cars/available-cars/${carId}`);
-    console.log("Hello")
+    const response = await api.get(`/api/cars/${carId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching car details:', error);
+    console.error(`Error fetching car details (ID: ${carId}):`, error.response?.data || error.message);
     throw error;
   }
 };
 
-// Create a new booking
-export const saveBooking = async (bookingData) => {
-
-  console.log("Booking data : ", bookingData)
+// Add a new car
+export const addCar = async (carData) => {
   try {
-    const response = await api.post('/api/bookings/save', bookingData);
+    const response = await api.post('/api/cars/add-car', carData);
     return response.data;
   } catch (error) {
-    console.error('Error saving booking:', error);
+    console.error('Error adding car:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// Update car details
+export const updateCar = async (carId, carData) => {
+  try {
+    const response = await api.put(`/api/cars/update/${carId}`, carData);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating car (ID: ${carId}):`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// Delete a car
+export const deleteCar = async (carId) => {
+  try {
+    await api.delete(`/api/cars/delete/${carId}`);
+  } catch (error) {
+    console.error(`Error deleting car (ID: ${carId}):`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// Fetch available orders
+export const getOrders = async () => {
+  try {
+    const response = await api.get('/api/orders/available-orders');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching available orders:', error.response?.data || error.message);
     throw error;
   }
 };
@@ -76,11 +92,22 @@ export const createOrder = async (orderData) => {
     const response = await api.post('/api/orders', orderData);
     return response.data;
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.error('Error creating order:', error.response?.data || error.message);
     throw error;
   }
 };
 
-// Other API calls (orders, login, etc.) can be added here
+// Create a new booking
+export const saveBooking = async (bookingData) => {
+  try {
+    const response = await api.post('/api/bookings/save', bookingData);
+    return response.data;
+  } catch (error) {
+    console.error('Error saving booking:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// Other API calls (authentication, users, etc.) can be added here
 
 export default api;
