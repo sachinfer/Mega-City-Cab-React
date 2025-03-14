@@ -5,7 +5,7 @@ import axios from 'axios';
 import './BookingPage.css';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8089', // Backend API base URL
+  baseURL: 'http://localhost:8089',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -13,21 +13,30 @@ const api = axios.create({
 
 const BookingPage = () => {
   const { carId } = useParams();
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [phoneNumber, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    time: '',
+    date: '',
+    destination: 'Pettah',
+  });
   const [vehicleName, setVehicleName] = useState('');
-  const [destination, setDestination] = useState('Pettah');
-  const [time, setTime] = useState('');
-  const [date, setDate] = useState('');
-  const [carHirePrice, setCarHirePrice] = useState(100); // Default Car Hire price for Pettah
-  const [driverCharge] = useState(500); // Fixed driver charge
-  const [totalPrice, setTotalPrice] = useState(600); // Default total price (Car Hire + Driver Charge)
+  const [carHirePrice, setCarHirePrice] = useState(100);
+  const driverCharge = 500;
+  const [totalPrice, setTotalPrice] = useState(carHirePrice + driverCharge);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Success popup state
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const destinations = ['Pettah', 'Nugegoda', 'Kollupitiya', 'Bambalapitiya', 'Maradana'];
+  const priceMap = {
+    Pettah: 100,
+    Nugegoda: 200,
+    Kollupitiya: 200,
+    Bambalapitiya: 200,
+    Maradana: 200,
+  };
 
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -38,47 +47,33 @@ const BookingPage = () => {
         console.error('Failed to fetch car details:', error);
       }
     };
-
     fetchCarDetails();
   }, [carId]);
 
-  // Function to update the car hire price based on the destination
-  const updatePrice = (destination) => {
-    const priceMap = {
-      Pettah: 100,
-      Nugegoda: 200,
-      Kollupitiya: 200,
-      Bambalapitiya: 200,
-      Maradana: 200,
-    };
-    setCarHirePrice(priceMap[destination] || 100); // Default to 100 if destination is not in the map
-  };
-
-  // Update the total price whenever the car hire price or destination changes
   useEffect(() => {
-    setTotalPrice(carHirePrice + driverCharge); // Car Hire price + Driver Charge
-  }, [carHirePrice, driverCharge]);
+    setTotalPrice(carHirePrice + driverCharge);
+  }, [carHirePrice]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'destination') {
+      setCarHirePrice(priceMap[value] || 100);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
-
-    const customerData = { name, address, phoneNumber, email, vehicleName, destination, time, date, carId, price: totalPrice };
+    const customerData = { ...formData, vehicleName, carId, price: totalPrice };
 
     try {
       await api.post('/api/bookings/save', customerData);
-      setShowSuccessPopup(true); // Show success popup
-
-      // Clear form fields
-      setName('');
-      setAddress('');
-      setPhone('');
-      setEmail('');
-      setTime('');
-      setDate('');
-      setDestination('Pettah');
-      setCarHirePrice(100); // Reset Car Hire price
-      setTotalPrice(600); // Reset total price
+      setShowSuccessPopup(true);
+      setFormData({ name: '', address: '', phoneNumber: '', email: '', time: '', date: '', destination: 'Pettah' });
+      setCarHirePrice(100);
+      setTotalPrice(600);
+      setTimeout(() => setShowSuccessPopup(false), 3000);
     } catch (error) {
       console.error('Error saving booking:', error);
     } finally {
@@ -90,144 +85,39 @@ const BookingPage = () => {
     <div className="booking-container">
       <h2>Customer Details</h2>
       <p>Please fill in your details to complete the rental process.</p>
-
       <form onSubmit={handleSubmit} className="booking-form">
+        {['name', 'address', 'phoneNumber', 'email'].map((field) => (
+          <div className="form-group" key={field}>
+            <label htmlFor={field}>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
+            <input type={field === 'email' ? 'email' : 'text'} id={field} name={field} value={formData[field]} onChange={handleChange} required className="form-control" disabled={isSubmitting} />
+          </div>
+        ))}
         <div className="form-group">
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="form-control"
-            disabled={isSubmitting}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="address">Address:</label>
-          <input
-            type="text"
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-            className="form-control"
-            disabled={isSubmitting}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="phoneNumber">Phone Number:</label>
-          <input
-            type="tel"
-            id="phoneNumber"
-            value={phoneNumber}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-            className="form-control"
-            disabled={isSubmitting}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="form-control"
-            disabled={isSubmitting}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="vehicle-name">Vehicle Name:</label>
-          <input
-            type="text"
-            id="vehicle-name"
-            value={vehicleName}
-            disabled
-            className="form-control"
-          />
+          <label htmlFor="vehicleName">Vehicle Name:</label>
+          <input type="text" id="vehicleName" value={vehicleName} disabled className="form-control" />
         </div>
         <div className="form-group">
           <label htmlFor="destination">Destination:</label>
-          <select
-            id="destination"
-            value={destination}
-            onChange={(e) => {
-              setDestination(e.target.value);
-              updatePrice(e.target.value); // Update car hire price when destination changes
-            }}
-            required
-            className="form-control"
-            disabled={isSubmitting}
-          >
+          <select id="destination" name="destination" value={formData.destination} onChange={handleChange} required className="form-control" disabled={isSubmitting}>
             {destinations.map((dest) => (
               <option key={dest} value={dest}>{dest}</option>
             ))}
           </select>
         </div>
-        <div className="form-group">
-          <label htmlFor="carHirePrice">Car Hire Price (LKR):</label>
-          <input
-            type="text"
-            id="carHirePrice"
-            value={`LKR ${carHirePrice}`}
-            disabled
-            className="form-control"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="driverCharge">Driver Charge (LKR):</label>
-          <input
-            type="text"
-            id="driverCharge"
-            value={`LKR ${driverCharge}`}
-            disabled
-            className="form-control"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="totalPrice">Total Price (LKR):</label>
-          <input
-            type="text"
-            id="totalPrice"
-            value={`LKR ${totalPrice}`}
-            disabled
-            className="form-control"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="date">Date:</label>
-          <input
-            type="date"
-            id="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-            className="form-control"
-            disabled={isSubmitting}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="time">Time:</label>
-          <input
-            type="time"
-            id="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            required
-            className="form-control"
-            disabled={isSubmitting}
-          />
-        </div>
-        <button type="submit" className="submit-btn" disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Submit'}
-        </button>
+        {['carHirePrice', 'driverCharge', 'totalPrice'].map((field, index) => (
+          <div className="form-group" key={field}>
+            <label htmlFor={field}>{field.replace(/([A-Z])/g, ' $1').trim()} (LKR):</label>
+            <input type="text" id={field} value={`LKR ${index === 0 ? carHirePrice : index === 1 ? driverCharge : totalPrice}`} disabled className="form-control" />
+          </div>
+        ))}
+        {['date', 'time'].map((field) => (
+          <div className="form-group" key={field}>
+            <label htmlFor={field}>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
+            <input type={field} id={field} name={field} value={formData[field]} onChange={handleChange} required className="form-control" disabled={isSubmitting} />
+          </div>
+        ))}
+        <button type="submit" className="submit-btn" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'}</button>
       </form>
-
-      {/* Success Popup */}
       {showSuccessPopup && (
         <div className="popup-overlay">
           <div className="popup">
