@@ -8,7 +8,7 @@ on:
         branches:
             - main
             - notification
-            workflow_dispatch:  # Allow manual trigger of the workflow
+    workflow_dispatch:  # Allow manual trigger of the workflow
 jobs:
     test:
         runs-on: ubuntu-latest
