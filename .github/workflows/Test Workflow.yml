@@ -19,7 +19,7 @@ jobs:
 
       # Step 2: Set up Node.js (React project environment)
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/upload-artifact@v2  # Use @v2 for stability
         with:
           node-version: '16'  # Specify your Node.js version
 
