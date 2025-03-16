@@ -32,6 +32,10 @@ function NavBar() {
         <li><Link to="/available-cars">Available Cars</Link></li>
         <li><Link to="/orders">Orders</Link></li>
         <li><Link to="/about-us">About Us</Link></li>
+        {/* Conditionally render the "Switch to Customer" link */}
+        {location.pathname === '/company-worker-dashboard' && (
+          <li><Link to="/choose-role">Switch to Customer</Link></li>
+        )}
         <li><button onClick={handleLogout}>Logout</button></li> 
       </ul>
     </nav>
