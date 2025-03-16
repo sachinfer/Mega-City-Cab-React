@@ -88,8 +88,8 @@ const BookingPage = () => {
 
   return (
     <div className="booking-container">
-      <h2>Customer Details</h2>
-      <p>Please fill in your details to complete the rental process.</p>
+      <h2>Exciting Ride Awaits!</h2>
+      <p>Fill in your details below to kickstart your adventure with us! 🚗💨</p>
 
       <form onSubmit={handleSubmit} className="booking-form">
         <div className="form-group">

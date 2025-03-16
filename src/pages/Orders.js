@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook for navigation
-import { getOrders } from '../services/api';  // Import API function
-import './Orders.css'; // Import CSS file for styling
+import { useNavigate } from 'react-router-dom';
+import { getOrders } from '../services/api';
+import { motion } from 'framer-motion'; // For animations
+import { FaDownload, FaSync, FaArrowLeft } from 'react-icons/fa'; // Icons for buttons
 
 const Orders = () => {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Hook to navigate to another page
+  const navigate = useNavigate();
 
   const fetchCars = async () => {
     try {
       const data = await getOrders();
       setCars(data);
     } catch (error) {
-      setError('Failed to fetch cars.');
+      setError('Failed to fetch orders. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCars(); // Initial fetch call on component mount
+    fetchCars();
   }, []);
 
   const handleRetry = () => {
     setLoading(true);
-    setError(null);  // Reset error state before retrying
-    fetchCars();  // Call the fetchCars function again
+    setError(null);
+    fetchCars();
   };
 
   const handleDownloadBill = (car) => {
@@ -53,45 +54,106 @@ const Orders = () => {
     link.click();
   };
 
-  if (loading) return <p className="loading-message">Loading cars...</p>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-purple-100">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-xl font-semibold text-gray-700"
+        >
+          Loading orders...
+        </motion.p>
+      </div>
+    );
+  }
 
   if (error) {
     return (
-      <div>
-        <p className="error-message">{error}</p>
-        <button className="btn-retry" onClick={handleRetry}>Retry</button>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-purple-100">
+        <motion.p
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-xl font-semibold text-red-600 mb-4"
+        >
+          {error}
+        </motion.p>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleRetry}
+          className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition duration-300"
+        >
+          <FaSync className="mr-2" />
+          Retry
+        </motion.button>
       </div>
     );
   }
 
   return (
-    <div className="cars-container">
-      <h2 className="page-title">Orders</h2>
-      <p className="intro-text">Here are the Orders cars for your ride:</p>
-      
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-6">
+      {/* Page Title */}
+      <motion.h2
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-3xl font-bold text-center text-gray-800 mb-6"
+      >
+        Your Orders
+      </motion.h2>
+
+      {/* Back Button */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => navigate(-1)}
+        className="flex items-center px-3 py-1.5 mb-6 bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300 text-sm mx-auto"
+      >
+        <FaArrowLeft className="mr-2" />
+        Back
+      </motion.button>
+
+      {/* Orders List */}
       {cars && cars.length > 0 ? (
-        <div className="cars-list">
+        <div className="max-w-2xl mx-auto">
           {cars.map((car) => (
-            <div className="car-item" key={car.id}>
-              <div className="car-details">
-                <h3 className="car-name">{car.name}</h3>
-                <p><strong>Address:</strong> {car.address}</p>
-                <p><strong>Phone Number:</strong> {car.phoneNumber}</p>
-                <p><strong>Email:</strong> {car.email}</p>
-                <p><strong>Vehicle Name:</strong> {car.vehicleName}</p>
-                <p><strong>Time:</strong> {car.time}</p>
+            <motion.div
+              key={car.id}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white/70 backdrop-blur-md rounded-xl shadow-lg p-4 mb-4 hover:shadow-xl transition-shadow duration-300 border border-white/20"
+            >
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">{car.name}</h3>
+              <div className="text-sm text-gray-600 space-y-1">
+                <p><strong>Vehicle:</strong> {car.vehicleName}</p>
                 <p><strong>Date:</strong> {car.date}</p>
+                <p><strong>Time:</strong> {car.time}</p>
                 <p><strong>Status:</strong> {car.status}</p>
-                <p><strong>Destination:</strong> {car.destination}</p>
                 <p><strong>Price:</strong> ${car.price}</p>
-                {/* Add the Download Bill button */}
-                <button onClick={() => handleDownloadBill(car)} className="btn-download-bill">Download Bill</button>
               </div>
-            </div>
+              <button
+                onClick={() => handleDownloadBill(car)}
+                className="flex items-center justify-center w-full mt-3 px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 text-sm"
+              >
+                <FaDownload className="mr-2" />
+                Download Bill
+              </button>
+            </motion.div>
           ))}
         </div>
       ) : (
-        <p className="no-cars-message">No cars available at the moment.</p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center text-gray-600"
+        >
+          No orders available at the moment.
+        </motion.p>
       )}
     </div>
   );

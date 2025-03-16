@@ -1,0 +1,50 @@
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseSlow {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulseSlower {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Apply Animations */
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.animate-fade-in-delay {
+  animation: fadeIn 1.5s ease-out;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fadeIn 2s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 6s infinite;
+}
+
+.animate-pulse-slower {
+  animation: pulseSlower 8s infinite;
+}

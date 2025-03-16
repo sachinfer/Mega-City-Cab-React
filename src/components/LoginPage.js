@@ -1,43 +1,41 @@
 import React, { useState } from "react";
 import { auth, googleProvider } from "../firebase/firebaseConfig";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FaGoogle, FaEnvelope, FaLock } from "react-icons/fa"; // Import icons
 
 const LoginPage = () => {
-  const [email, setEmail] = useState(""); // State for email
-  const [password, setPassword] = useState(""); // State for password
-  const [loading, setLoading] = useState(false); // State for loading
-  const [error, setError] = useState(""); // State for error message
-  const navigate = useNavigate(); // Initialize navigate for page redirection
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  // Hardcoded credentials
   const hardcodedUsername = "sachin";
   const hardcodedPassword = "qaz@123";
 
-  // Handle email login
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
-    // Check if email and password match hardcoded credentials
     if (email === hardcodedUsername && password === hardcodedPassword) {
       setLoading(false);
       navigate("/choose-role");
     } else {
       setLoading(false);
-      setError('Invalid email or password');
+      setError("Invalid email or password");
     }
   };
 
-  // Handle Google login
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
       navigate("/choose-role");
     } catch (err) {
-      setError('Google login failed');
+      setError("Google login failed");
     } finally {
       setLoading(false);
     }
@@ -45,50 +43,74 @@ const LoginPage = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-900 to-blue-800">
-      <div className="flex flex-col md:flex-row items-center gap-10 p-10">
-        <div className="text-white max-w-md">
-          <h1 className="text-5xl font-bold mb-4">Mega City <br /> <span className="text-blue-300">Cab Service</span></h1>
-          <p className="text-gray-300">
-            Mega City Cab Service is Sri Lanka's No. 1 cab service and online booking platform. We offer reliable and affordable transportation solutions to meet all your travel needs. Book your ride with us today and experience the best in class service.
+      <motion.div 
+        className="flex flex-col md:flex-row items-center gap-10 p-10 w-full max-w-6xl bg-white shadow-2xl rounded-xl overflow-hidden"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        {/* Left Side: Branding and Description */}
+        <div className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-700 p-10 text-white rounded-xl">
+          <h1 className="text-5xl font-bold mb-4">Mega City <br /> <span className="text-yellow-400">Cab Service</span></h1>
+          <p className="text-gray-200 leading-relaxed">
+            Mega City Cab Service – Sri Lanka’s #1 cab and online booking platform. Reliable, affordable rides for all your travel needs. Book now for top-tier service!
           </p>
         </div>
-        <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm">
+
+        {/* Right Side: Login Form */}
+        <motion.div 
+          className="flex-1 p-8 bg-white rounded-xl"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <h2 className="text-3xl font-bold text-gray-800 mb-6">Welcome Back!</h2>
           <form className="space-y-6" onSubmit={handleEmailLogin}>
-            <input 
-              type="email" 
-              placeholder="Email address" 
-              className="w-full p-3 border rounded-md" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-            />
-            <input 
-              type="password" 
-              placeholder="Password" 
-              className="w-full p-3 border rounded-md" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-            />
+            <div className="relative">
+              <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input 
+                type="email" 
+                placeholder="Email address" 
+                className="w-full pl-10 p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+              />
+            </div>
+            <div className="relative">
+              <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input 
+                type="password" 
+                placeholder="Password" 
+                className="w-full pl-10 p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+              />
+            </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <button 
+            <motion.button 
               type="submit" 
-              className="w-full py-3 bg-blue-500 text-white rounded-md font-semibold hover:bg-blue-600" 
+              className="w-full py-3 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 shadow-md transition duration-300 flex items-center justify-center gap-2"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               disabled={loading}
             >
+              <FaEnvelope className="text-lg" />
               {loading ? 'Loading...' : 'SIGN IN'}
-            </button>
+            </motion.button>
           </form>
-          <p className="text-center text-gray-500 my-4">or sign in with:</p>
-          <div className="flex justify-center gap-4 text-blue-500">
-            <button 
-              onClick={handleGoogleLogin} 
-              className="text-blue-500 hover:text-blue-600 font-semibold"
-              disabled={loading}
-            >
-              {loading ? 'Loading...' : 'Sign in with Google'}
-            </button>
-          </div>
-        </div>
-      </div>
+          <p className="text-center text-gray-500 my-6">or sign in with:</p>
+          <motion.button 
+            onClick={handleGoogleLogin} 
+            className="w-full py-3 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700 shadow-md transition duration-300 flex items-center justify-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            disabled={loading}
+          >
+            <FaGoogle className="text-lg" />
+            {loading ? 'Loading...' : 'Sign in with Google'}
+          </motion.button>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
