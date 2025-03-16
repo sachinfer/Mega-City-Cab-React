@@ -28,7 +28,7 @@ function HomePage() {
               <FaUser className="text-xl" /> Login
             </button>
           </Link>
-          <Link to="/signup" className="w-48">
+          <Link to="/login" className="w-48">
             <button className="signup-button bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-700 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-full flex items-center justify-center gap-2">
               <FaUserPlus className="text-xl" /> Sign Up
             </button>
