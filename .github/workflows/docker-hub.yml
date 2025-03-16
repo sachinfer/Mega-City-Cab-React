@@ -1,11 +1,8 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - main 
-      - firebase # Trigger the workflow on push to the main branch
-  workflow_dispatch:  # Allow manual trigger of the workflow
+  repository_dispatch:
+    types: [docker-pipeline]  # Listen to the 'docker-pipeline' event triggered by the test pipeline
 
 jobs:
   build:

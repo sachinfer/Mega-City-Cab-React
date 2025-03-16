@@ -1,0 +1,47 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+      - firebase  # Trigger on push to the main branch or firebase
+  workflow_dispatch:  # Allow manual trigger of the workflow
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: dev  # Specify the environment
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js (React project environment)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Specify your Node.js version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: npm test -- --ci --coverage
+
+      # Optional: Upload test reports or coverage
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: ./coverage/
+      
+      # Step 5: Trigger Docker pipeline if tests succeed (use the repository dispatch event)
+      - name: Trigger Docker pipeline
+        if: success()
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          repository: your-username/your-repo-name  # Replace with your repo name
+          event-type: docker-pipeline  # Custom event type to trigger the Docker pipeline
