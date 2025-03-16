@@ -5,6 +5,8 @@ import './CarManagement.css'; // Import the CSS file
 const CarManagement = () => {
   const [cars, setCars] = useState([]);
   const [newCar, setNewCar] = useState({ make: '', model: '', status: 'Available', quantity: 0, price: 0 });
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [modalMessage, setModalMessage] = useState(''); // State to store modal message
 
   useEffect(() => {
     fetchCars();
@@ -27,8 +29,12 @@ const CarManagement = () => {
       console.log("Car added:", response.data);
       fetchCars();
       setNewCar({ make: '', model: '', status: 'Available', quantity: 0, price: 0 });
+      setModalMessage('Car added successfully!'); // Set success message
+      setShowModal(true); // Show modal
     } catch (error) {
       console.error("Error adding car:", error.response ? error.response.data : error.message);
+      setModalMessage('Failed to add car. Please try again.'); // Set error message
+      setShowModal(true); // Show modal
     }
   };
 
@@ -38,8 +44,12 @@ const CarManagement = () => {
         headers: { 'Content-Type': 'application/json' }
       });
       fetchCars();
+      setModalMessage('Car updated successfully!'); // Set success message
+      setShowModal(true); // Show modal
     } catch (error) {
       console.error("Error updating car:", error.response ? error.response.data : error.message);
+      setModalMessage('Failed to update car. Please try again.'); // Set error message
+      setShowModal(true); // Show modal
     }
   };
 
@@ -47,8 +57,12 @@ const CarManagement = () => {
     try {
       await axios.delete(`http://localhost:8089/api/cars/delete-car/${id}`);
       fetchCars();
+      setModalMessage('Car deleted successfully!'); // Set success message
+      setShowModal(true); // Show modal
     } catch (error) {
       console.error("Error deleting car:", error.response ? error.response.data : error.message);
+      setModalMessage('Failed to delete car. Please try again.'); // Set error message
+      setShowModal(true); // Show modal
     }
   };
 
@@ -93,6 +107,16 @@ const CarManagement = () => {
         <input type="number" placeholder="Price" value={newCar.price} onChange={(e) => setNewCar({ ...newCar, price: Number(e.target.value) })} />
         <button onClick={handleAddCar}>Add Car</button>
       </div>
+
+      {/* Modal for Success/Error Messages */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>{modalMessage}</p>
+            <button onClick={() => setShowModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
